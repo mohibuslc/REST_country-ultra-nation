@@ -1,58 +1,72 @@
-import logo from './logo.svg';
-import {useState, useEffect} from 'react';
-import Country from '../src/components/Country/Country';
+    import logo from './logo.svg';
+    import {useState, useEffect} from 'react';
+    import Country from '../src/components/Country/Country';
+import Cart from './components/Cart/Cart';
+    import './App.css';
 
-import './App.css';
+    function App() {
 
-function App() {
-
-  const [countries, setCountries] = useState([]);
- 
-
-  useEffect(()=>{
-
-    fetch('https://restcountries.eu/rest/v2/all')
+      const [countries, setCountries] = useState([]);
     
-   .then(res => res.json())
-   .then(data =>{
-     setCountries(data);
+      const [ cart , setCart]= useState([]);
 
-     console.log (data);
-     data.map(country => country.name)
-    })
 
-  
-  },[])
+      useEffect(()=>{
 
-  return (
-    <div className="App">
+        fetch('https://restcountries.eu/rest/v2/all')
+        
+      .then(res => res.json())
+      .then(data =>{
+        setCountries(data);
 
-    <h2>Countries Loadad:{countries.length}</h2>
-  
+        console.log (data);
+        data.map(country => country.name)
+        })
 
-    {
+      
+      },[])
 
-      countries.map(country => <Country name={country.name}></Country>)
-    }
+       const handleAdd = (country) => { 
+         
+        
+        const newCart = [...cart , country];
+        setCart (newCart)
+        //console.log('Added_Country', country)};
 
-  
 
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+       }
+      return (
+        
+        <div className="App">
 
-export default App;
+        <h2>Countries Loadad:{countries.length}</h2>
+        <h4>Country Adde:{cart.length} </h4>
+        <Cart cart ={cart}></Cart>
+
+        {
+
+          countries.map(country => <Country country = {country}  handleAdd ={handleAdd} key ={country.alpha3Code} ></Country>)
+
+        }
+
+      
+
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <p>
+              Edit <code>src/App.js</code> and save to reload.
+            </p>
+            <a
+              className="App-link"
+              href="https://reactjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn React
+            </a>
+          </header>
+        </div>
+      );
+    };
+
+    export default App;
